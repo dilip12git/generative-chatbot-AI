@@ -1,0 +1,252 @@
+.chatbot-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+}
+
+.chat-header {
+    color: white;
+    padding: 15px;
+    text-align: start;
+    font-size: 1.5em;
+    position: fixed;
+    top: 0;
+    background-color: #212121;
+    width: 100%;
+}
+
+.chat-body::-webkit-scrollbar {
+    display: none;
+}
+
+.chat-body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.chat-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.message_body {
+    margin-bottom: 15%;
+    margin-top: 10%;
+    width: 700px;
+    height: max-content;
+
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.chat-message.user {
+    justify-content: flex-end;
+}
+
+.chat-message.model {
+    justify-content: flex-start;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message-content.user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    color: white !important;
+    text-align: start;
+    max-width: max-content;
+    background-color: #2F2F2F;
+    border-radius: 50px;
+    padding: 0px 12px;
+    max-width: 400px;
+    position: relative;
+
+}
+
+.message-content.model {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    color: white !important;
+    background-color: transparent;
+    padding: 0px 16px;
+}
+
+.ctr {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    border-radius: 50px;
+    background: #2F2F2F;
+    box-shadow: -4px 8px 24px hsla(0, 0%, 0%, 0.25);
+    padding: 0px 16px;
+    max-width: 700px;
+    min-width: 700px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    background-color: #212121;
+    padding-bottom: 10px;
+
+
+}
+
+textarea {
+    flex: 1;
+    margin-right: 10px;
+    font-size: 16px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    margin-top: 15px;
+
+}
+
+.send-button {
+    border: none;
+    width: 35px;
+    height: 35px;
+    padding: 5px;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.suggestions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.suggestions h1 {
+    color: white;
+    font-size: 26px;
+    font-weight: bolder;
+}
+
+.suggestions_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.suggestion-card {
+    flex: 1 1 120px;
+    background: #2F2F2F;
+    height: 120px;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: ease-in-out .3s;
+}
+
+.suggestion-card:hover {
+    background: #5e5970;
+    box-shadow: -4px 8px 24px hsla(0, 0%, 0%, 0.25);
+}
+
+.suggestion-card p {
+    margin: 0;
+    color: white;
+    font-weight: 300;
+}
+
+.chat-body h1 {
+    text-align: center;
+    color: white;
+}
+
+@media (max-width:800px){
+    .message_body {
+        margin-bottom: 15%;
+        margin-top: 10%;
+        width:500px;
+        height: max-content;
+    
+    }
+    .ctr {
+
+        max-width: 500px;
+        min-width: 500px;
+    }
+    
+}
+
+@media (max-width:568px){
+    .message_body {
+        margin-bottom: 15%;
+        margin-top: 10%;
+        width:320px;
+        height: max-content;
+    
+    }
+    .ctr {
+        max-width: 320px;
+        min-width: 320px;
+    }
+
+    .suggestions_container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+    }
+    .suggestion-card {
+       height: max-content;
+    }
+    .suggestions h1 {
+        color: white;
+        font-size: 18px;
+        font-weight: bolder;
+        margin-top: 20px;
+    }
+    .chat-header {
+        padding: 10px;
+        font-size: 20px;
+   
+    }
+
+    .message-content.user {
+        max-width: 200px;
+        border-radius: 5px;
+    
+    }
+
+    .message_body {
+        margin-bottom: 25%;
+        margin-top: 15%;
+
+    }
+}
