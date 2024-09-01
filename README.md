@@ -2,25 +2,25 @@
 # Chatbot Generative AI with Genmi API
 ![Screenshot 2024-09-01 164411](https://github.com/user-attachments/assets/49c6a0af-64c2-48c0-981e-63009b0886c9)
 
-# Chatbot Description
+## Chatbot Description
 Introducing our intelligent and interactive chatbot, developed using the cutting-edge Genmi API and built with React.js! This powerful chatbot harnesses advanced generative AI to provide accurate and engaging responses to your queries, ensuring a seamless and intuitive user experience.
 <img width="934" alt="Screenshot 2024-09-01 163611" src="https://github.com/user-attachments/assets/b46caa31-a70a-4c7d-89ce-788fbf2ef877">
 
-# Key Features:
-# Advanced AI Integration:
+## Key Features:
+## `Advanced AI Integration:`
 Utilizing the Genmi API, our chatbot is equipped with state-of-the-art natural language processing capabilities. It understands and responds to a wide range of questions and commands with remarkable accuracy.
 
-# Dynamic User Interaction:
+## `Dynamic User Interaction:`
 Designed with React.js, the chatbot offers a responsive and smooth interface. It interacts with users in real-time, providing a fluid conversational experience that feels natural and engaging.
 
-# Customizable and Scalable: 
+## `Customizable and Scalable`: 
 The chatbot is built to adapt to various use cases and can be easily customized to fit your specific needs. Whether it's for customer support, information retrieval, or interactive experiences, it scales effortlessly to handle diverse scenarios.
 
-# User-Friendly Interface: 
+## `User-Friendly Interface`: 
 The React.js framework ensures that the chatbot’s interface is not only attractive but also highly functional. Users will enjoy a clean, modern design that enhances usability and makes interactions straightforward and enjoyable.
 <img width="753" alt="Screenshot 2024-09-01 163823" src="https://github.com/user-attachments/assets/984760ae-c026-4326-9827-34b3c47dbf3d">
 
-# Continous Improvement
+## `Continous Improvement`
 Leveraging the power of generative AI, our chatbot continuously learns and improves from interactions, providing increasingly accurate and relevant responses over time.
 
 # Getting Started with Create React App
