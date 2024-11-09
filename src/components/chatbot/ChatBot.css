@@ -58,7 +58,7 @@
 
 .message-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
 }
 
@@ -249,4 +249,24 @@ textarea {
         margin-top: 15%;
 
     }
+}
+.model-profile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+   
+}
+.model-img{
+    width: 30px;
+    height: 30px;
+    border-radius:1px solid whitesmoke;
+    border-radius: 50%;
+    padding: 1px;
+}
+.response-message{
+    font-size: 14px;
+    font-weight: 400px;
+    padding: 8px 5px;
 }

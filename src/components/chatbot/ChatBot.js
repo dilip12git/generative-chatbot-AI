@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import './ChatBot.css';
 import { HiArrowUp } from "react-icons/hi";
 import { HashLoader } from "react-spinners";
+import { marked } from 'marked';
 
 const API_KEY = process.env.REACT_APP_GEMINI_API;
-
 const ChatBot = () => {
     const [message, setMessage] = useState('');
     const [isSent, setIsSent] = useState(true);
@@ -12,28 +12,17 @@ const ChatBot = () => {
     const [typingMessage, setTypingMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const textareaRef = useRef(null);
+    const chatBodyRef = useRef(null);
     const [randomItems, setRandomItems] = useState([]);
 
     const trainingPrompt = [
-        {
-            "role": "user",
-            "parts": [{ "text": "This is Introductory dialogue for any prompt : Hello there! I'm the ChatBot.AI created by Dilip Kumar. I'm here to help!" }]
-        },
-        {
-            "role": "model",
-            "parts": [{ "text": "Got it!" }]
-        },
-        {
-            "role": "user",
-            "parts": [{ "text": "You" }]
-        },
-        {
-            "role": "model",
-            "parts": [{ "text": "I am a chatbot created by Dilip Kumar." }]
-        },
+        { "role": "user", "parts": [{ "text": "Hello there! I'm the ChatBot.AI created by Dilip Kumar. I'm here to help!" }] },
+        { "role": "model", "parts": [{ "text": "Got it!" }] },
+        { "role": "user", "parts": [{ "text": "You" }] },
+        { "role": "model", "parts": [{ "text": "I am a chatbot created by Dilip Kumar." }] },
     ];
 
-    const recommended = [
+    const recommendedPrompts  = [
         { 'id': 1, 'prompt': 'How to manage stress effectively?' },
         { 'id': 2, 'prompt': 'Tips for learning a new language.' },
         { 'id': 3, 'prompt': 'Best ways to stay motivated daily.' },
@@ -85,46 +74,36 @@ const ChatBot = () => {
         { 'id': 49, 'prompt': 'How to create a minimalist lifestyle?' },
         { 'id': 50, 'prompt': 'Strategies for reducing screen time.' }
     ];
-    
- 
     const sendMessage = async () => {
         if (!API_KEY) {
             console.error('API key is missing');
             return;
         }
         setMessage('');
-
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
         const messagesToSend = [
             ...trainingPrompt,
             ...allMessages,
-            {
-                "role": "user",
-                "parts": [{ "text": message }]
-            }
+            { "role": "user", "parts": [{ "text": message }] }
         ];
-
+        
+        setAllMessages(prevMessages => [...prevMessages, { "role": "user", "parts": [{ "text": message }] }]);
         setIsSent(false);
+        
         try {
-            const res = await fetch(url, {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ "contents": messagesToSend })
             });
 
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const resjson = await res.json();
-            const responseMessage = resjson.candidates[0].content.parts[0].text;
-            setAllMessages(prevMessages => [
-                ...prevMessages,
-                { "role": "user", "parts": [{ "text": message }] }
-            ]);
+            if (!res.ok) throw new Error('Network response was not ok');
+            const resJson = await res.json();
+            const responseMessage = resJson.candidates[0].content.parts[0].text;
+
             adjustTextareaHeight();
             setMessage('');
             setIsTyping(true);
-            simulateTyping(responseMessage);
+            simulateTyping(marked(responseMessage));
         } catch (error) {
             console.error('Error sending message:', error);
         } finally {
@@ -132,11 +111,9 @@ const ChatBot = () => {
         }
     };
 
-
     const simulateTyping = (responseMessage) => {
         let index = -1;
         setTypingMessage('');
-
         const typingInterval = setInterval(() => {
             if (index < responseMessage.length) {
                 setTypingMessage(prev => prev + responseMessage[index]);
@@ -144,13 +121,12 @@ const ChatBot = () => {
             } else {
                 clearInterval(typingInterval);
                 setIsTyping(false);
-                setAllMessages(prevMessages => [
-                    ...prevMessages,
-                    { "role": "model", "parts": [{ "text": responseMessage }] }
-                ]);
+                setAllMessages(prevMessages => [...prevMessages, { "role": "model", "parts": [{ "text": responseMessage }] }]);
             }
         }, 10);
     };
+
+
     const adjustTextareaHeight = () => {
         const textarea = textareaRef.current;
         textarea.style.height = 'auto';
@@ -163,74 +139,68 @@ const ChatBot = () => {
     };
 
     const handleKeyDown = (e) => {
-        if (message.trim()) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-
-            }
+        if (message.trim() && e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
         }
+    };
 
-    };
-    
     useEffect(() => {
-      const shuffled = shuffleArray(recommended);
-      setRandomItems(shuffled.slice(0, 3));
+        const shuffledPrompts = recommendedPrompts.sort(() => 0.5 - Math.random());
+        setRandomItems(shuffledPrompts.slice(0, 3));
     }, []);
-  
-    const shuffleArray = (array) => {
-      const shuffledArray = [...array]; 
-      for (let i = shuffledArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-      }
-      return shuffledArray;
-    };
+
     const setRecommended = (prompt) => {
         setMessage(prompt);
     }
+
     return (
         <div className="chatbot-container">
             <div className="chat-header">
                 <span>ChatBot.AI</span>
             </div>
 
-            <div className="chat-body">
+            <div className="chat-body" >
                 <div className='message_body'>
                     {allMessages.length > 0 ? (
                         allMessages.map((msg, index) => (
                             <div key={index} className={`chat-message ${msg.role}`}>
                                 <div className={`message-content ${msg.role}`}>
-                                    <span style={{ fontWeight: 'bold' }}>{msg.role === 'user' ? '' : 'ChatBot'}</span>
-                                    <pre><code>{msg.parts[0].text}</code></pre>
+                                    {msg.role === 'model' && (
+                                        <div className='model-profile'>
+                                            <img src='/icon.png' className='model-img' alt='icon' />
+                                            <span>Chatbot</span>
+                                        </div>
+                                    )}
+                                    <div className={`response-message ${msg.role}`} dangerouslySetInnerHTML={{ __html: msg.parts[0].text }}></div>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div>
-                            <div className="suggestions">
-                                <h1>How can I help you today?</h1>
-                                <div className="suggestions_container">
-                                    {randomItems.map((prompt, index) => (
-                                        <div
-                                            key={index}
-                                            className="suggestion-card"
-                                            onClick={() => setRecommended(prompt.prompt)}
-                                        >
-                                            <p>{prompt.prompt}</p>
-                                        </div>
-                                    ))}
-                                </div>
+                        <div className="suggestions">
+                            <h1>How can I help you today?</h1>
+                            <div className="suggestions_container">
+                                {randomItems.map((prompt, index) => (
+                                    <div
+                                        key={index}
+                                        className="suggestion-card"
+                                        onClick={() => setRecommended(prompt.prompt)}
+                                    >
+                                        <p>{prompt.prompt}</p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
 
-
                     {isTyping && (
                         <div className="chat-message model">
                             <div className="message-content model">
-                                <span style={{ fontWeight: 'bold' }}>ChatBot</span>
-                                <pre ><code>{typingMessage}</code></pre>
+                                <div className='model-profile'>
+                                    <img src='/icon.png' className='model-img' alt='icon' />
+                                    <span>Chatbot</span>
+                                </div>
+                                <div className='response-message' dangerouslySetInnerHTML={{ __html: typingMessage }}></div>
                             </div>
                         </div>
                     )}
@@ -243,7 +213,6 @@ const ChatBot = () => {
                             value={message}
                             onChange={handleInputChange}
                             onKeyDown={handleKeyDown}
-
                             style={{
                                 width: '100%',
                                 minHeight: '10px',
@@ -251,31 +220,25 @@ const ChatBot = () => {
                                 resize: 'none',
                                 overflow: 'hidden',
                                 boxSizing: 'border-box',
-
                             }}
                         />
-
-                        {
-                            isSent ?
-                                <button
-                                    className="send-button"
-                                    onClick={sendMessage}
-                                    disabled={!message.trim()}
-                                    style={{
-                                        backgroundColor: message.trim() && !isTyping ? 'white' : 'grey',
-
-
-                                    }}
-                                >
-                                    <HiArrowUp style={{ color: message.trim() && !isTyping ? 'black' : '#2F2F2F' }} />
-                                </button>
-                                :
-                                <HashLoader color="#36d7b7" size={30} />
-                        }
+                        {isSent ? (
+                            <button
+                                className="send-button"
+                                onClick={sendMessage}
+                                disabled={!message.trim()}
+                                style={{
+                                    backgroundColor: message.trim() && !isTyping ? 'white' : 'grey',
+                                }}
+                            >
+                                <HiArrowUp style={{ color: message.trim() && !isTyping ? 'black' : '#2F2F2F' }} />
+                            </button>
+                        ) : (
+                            <HashLoader color="#36d7b7" size={30} />
+                        )}
                     </div>
                     <span style={{ color: 'white', fontSize: '11px' }}>Chatbot can make mistakes. Check important info.</span>
                 </div>
-
             </div>
         </div>
     );
